@@ -1,17 +1,17 @@
-
 from __init__ import CONN, CURSOR
 
 class Reader:
-
-
+    def __init__(self, name):
+        self._name = name
+        self.id = None
 
     @property
-    def (self):
-        return self._
+    def name(self):
+        return self._name
 
-    @.setter
-    def (self, value):
-        if isinstance (value, ) and value:
-            self._ = value
+    @name.setter
+    def name(self, value):
+        if isinstance (value, str) and 0 < len(value) <= 15:
+            self._name = value
         else:
-            raise ValueError (" already exists")
+            raise ValueError ("name already exists")
