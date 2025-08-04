@@ -6,6 +6,8 @@ class Author:
         self._name = name
         self.id = None
 
+    def __repr__(self):
+        return f"AUTHOR name: {self.name}"
 
     @property
     def name(self):
@@ -19,3 +21,8 @@ class Author:
             raise ValueError ("name already exists")
 
 
+    @classmethod
+    def _from_db_row(cls, row):
+        author = cls(row[1])
+        author.id = row[0]
+        return author

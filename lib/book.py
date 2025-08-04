@@ -5,6 +5,9 @@ class Book:
         self.title = title
         self.author = author
         self.id = None
+
+    def __repr__(self):
+        return f"BOOK title: {self.title} | author: {self.author}"
     
     @property
     def title(self):
@@ -27,3 +30,9 @@ class Book:
             self._author = value
         else:
             raise ValueError ("author already exists")
+        
+    @classmethod
+    def _from_db_row(cls, row):
+        book = cls(row[1], row[2])
+        book.id = row[0]
+        return book

@@ -5,6 +5,9 @@ class Reader:
         self._name = name
         self.id = None
 
+    def __repr__(self):
+        return f"READER name: {self.name}"
+
     @property
     def name(self):
         return self._name
@@ -15,3 +18,10 @@ class Reader:
             self._name = value
         else:
             raise ValueError ("name already exists")
+        
+
+    @classmethod
+    def _from_db_row(cls, row):
+        reader = cls(row[1])
+        reader.id = row[0]
+        return reader
