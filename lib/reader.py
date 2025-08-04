@@ -1,3 +1,4 @@
+import sqlite3
 from __init__ import CONN, CURSOR
 
 class Reader:
