@@ -18,7 +18,7 @@ class Reader:
         if isinstance (value, str) and 0 < len(value) <= 15:
             self._name = value
         else:
-            raise ValueError ("name already exists")
+            raise ValueError ("Reader name cannot be blank and cannot exceed 15 characters")
         
 
     @classmethod
@@ -31,22 +31,43 @@ class Reader:
     def find_by_id(cls, id):
         CURSOR.execute("SELECT * FROM readers WHERE id = ?", (id,))
         row = CURSOR.fetchone()
-        if row:
-            return cls._from_db_row(row)
-        else:
-            return None
+        return cls._from_db_row(row) if row else None
     
     @classmethod
     def find_by_name(cls, name):
         CURSOR.execute("SELECT * FROM readers WHERE name = ?", (name,))
-        row = CURSOR.fetchone()
-        if row:
-            return cls._from_db_row(row)
-        else:
-            return None
+        rows = CURSOR.fetchall()
+        return [cls._from_db_row(row) for row in rows] if rows else []
     
     @classmethod
     def get_all(cls):
         CURSOR.execute("SELECT * FROM readers")
         rows = CURSOR.fetchall()
         return [cls._from_db_row(row) for row in rows] if rows else []
+    
+    @classmethod
+    def add_new(cls, name):
+        existing = cls.find_by_name(name)
+        if existing:
+            return existing[0]
+        reader = cls(name)
+        reader.save()
+        return reader
+    
+    def update(self):
+        CURSOR.execute("UPDATE readers SET name = ? WHERE id = ?", (self._name, self.id,))
+        CONN.commit()
+
+
+    def delete(self):
+        CURSOR.execute("DELETE FROM readers WHERE id = ?", (self.id,))
+        CONN.commit()
+
+    
+    def save(self):
+        try:
+            CURSOR.execute("INSERT INTO readers (name) VALUES (?)", (self._name,))
+            CONN.commit()
+            self.id = CURSOR.lastrowid
+        except sqlite3.IntegrityError:
+            print ("Error: A reader with this name may already exist.")
