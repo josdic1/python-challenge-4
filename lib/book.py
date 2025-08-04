@@ -44,6 +44,12 @@ class Book:
         return row
     
     @classmethod
+    def find_by_title(cls, title):
+        CURSOR.execute("SELECT * FROM books WHERE title = ?", (title,))
+        rows = CURSOR.fetchall()
+        return rows
+    
+    @classmethod
     def get_all(cls):
         CURSOR.execute("SELECT * FROM books")
         rows = CURSOR.lastrowid

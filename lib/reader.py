@@ -33,6 +33,12 @@ class Reader:
         return row
     
     @classmethod
+    def find_by_name(cls, name):
+        CURSOR.execute("SELECT * FROM readers WHERE name = ?", (name,))
+        rows = CURSOR.fetchall()
+        return rows
+    
+    @classmethod
     def get_all(cls):
         CURSOR.execute("SELECT * FROM readers")
         rows = CURSOR.lastrowid
