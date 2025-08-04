@@ -21,9 +21,9 @@ def setup_database():
         conn.close()
 
 
-if not os.path.exists(DB_NAME):
+if not os.path.exists('databse.py'):
     setup_database()
     
 
-CONN = sqlite3.connect(DB_NAME)
+CONN = sqlite3.connect('databse.py')
 CURSOR = CONN.cursor()

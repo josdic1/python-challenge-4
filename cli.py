@@ -1,4 +1,6 @@
-from python_challenge_4 import CONN, CURSOR
+from __init__ import CONN, CURSOR
+
+
 
 
 
