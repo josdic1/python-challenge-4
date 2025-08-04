@@ -28,6 +28,12 @@ class Author:
         return author
     
     @classmethod
+    def find_by_id(cls, id):
+        CURSOR.execute("SELECT * FROM authors WHERE id = ?", (id,))
+        row = CURSOR.fetchone()
+        return row
+    
+    @classmethod
     def get_all(cls):
         CURSOR.execute("SELECT * FROM authors")
         rows = CURSOR.lastrowid

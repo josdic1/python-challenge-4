@@ -38,10 +38,16 @@ class Book:
         return book
     
     @classmethod
+    def find_by_id(cls, id):
+        CURSOR.execute("SELECT * FROM books WHERE id = ?", (id,))
+        row = CURSOR.fetchone()
+        return row
+    
+    @classmethod
     def get_all(cls):
         CURSOR.execute("SELECT * FROM books")
         rows = CURSOR.lastrowid
         return rows
     
-    
+
 
