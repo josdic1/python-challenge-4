@@ -36,15 +36,13 @@ class Author:
     @classmethod
     def find_by_name(cls, name):
         CURSOR.execute("SELECT * FROM authors WHERE name = ?", (name,))
-        row = CURSOR.fetchone()
-        if row:
-            return cls._from_db_row(row)
-        else:
-            return None
+        rows = CURSOR.fetchall()
+        return [cls._from_db_row(row) for row in rows] if rows else []
         
-    
     @classmethod
     def get_all(cls):
         CURSOR.execute("SELECT * FROM authors")
         rows = CURSOR.fetchall()
         return [cls._from_db_row(row) for row in rows] if rows else []
+    
+    
