@@ -1,4 +1,4 @@
-
+import sqlite3
 from __init__ import CONN, CURSOR
 
 class Author:
@@ -45,4 +45,31 @@ class Author:
         rows = CURSOR.fetchall()
         return [cls._from_db_row(row) for row in rows] if rows else []
     
+    @classmethod
+    def add_new(cls, name):
+        existing = cls.find_by_name(name)
+        if existing:
+            return existing[0]
+        author = cls(name)
+        author.save()
+        return author
+    
+    def update(self):
+        CURSOR.execute("UPDATE authors SET name = ? WHERE id = ?", (self._name, self.id,))
+        CONN.commit()
+
+    def delete(self):
+        CURSOR.execute("DELETE FROM authors WHERE id = ?", (self.id,))
+        CONN.commit()
+
+    
+    def save(self):
+        try:
+            CURSOR.execute("INSERT INTO authors (name) VALUES (?)", (self._name,))
+            CONN.commit()
+            self.id = CURSOR.lastrowid
+        except sqlite3.IntegrityError:
+            print("Error: An author with this names may already exist.")
+    
+
     
