@@ -18,7 +18,7 @@ class Author:
         if isinstance (value, str) and len(value) >= 3:
             self._name = value
         else:
-            raise ValueError ("name already exists")
+            raise ValueError ("Name must contain at least 3 characters.")
 
 
     @classmethod
