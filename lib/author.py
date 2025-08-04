@@ -44,6 +44,7 @@ class Author:
             return cls._from_db_row(row)
         else:
             return None
+        
     
     @classmethod
     def get_all(cls):
