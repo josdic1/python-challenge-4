@@ -26,3 +26,9 @@ class Author:
         author = cls(row[1])
         author.id = row[0]
         return author
+    
+    @classmethod
+    def get_all(cls):
+        CURSOR.execute("SELECT * FROM authors")
+        rows = CURSOR.lastrowid
+        return rows

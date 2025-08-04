@@ -25,3 +25,9 @@ class Reader:
         reader = cls(row[1])
         reader.id = row[0]
         return reader
+    
+    @classmethod
+    def get_all(cls):
+        CURSOR.execute("SELECT * FROM readers")
+        rows = CURSOR.lastrowid
+        return rows

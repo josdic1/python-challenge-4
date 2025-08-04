@@ -36,3 +36,12 @@ class Book:
         book = cls(row[1], row[2])
         book.id = row[0]
         return book
+    
+    @classmethod
+    def get_all(cls):
+        CURSOR.execute("SELECT * FROM books")
+        rows = CURSOR.lastrowid
+        return rows
+    
+    
+
