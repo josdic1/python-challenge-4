@@ -31,10 +31,7 @@ class Author:
     def find_by_id(cls, id):
         CURSOR.execute("SELECT * FROM authors WHERE id = ?", (id,))
         row = CURSOR.fetchone()
-        if row:
-            return cls._from_db_row(row)
-        else:
-            return None
+        return cls._from_db_row(row) if row else None
     
     @classmethod
     def find_by_name(cls, name):
