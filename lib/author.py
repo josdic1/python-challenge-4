@@ -62,6 +62,9 @@ class Author:
         CURSOR.execute("DELETE FROM authors WHERE id = ?", (self.id,))
         CONN.commit()
 
+    def books(self):
+        
+
     
     def save(self):
         try:
