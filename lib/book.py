@@ -1,3 +1,4 @@
+import sqlite3
 from __init__ import CONN, CURSOR
 
 class Book:
@@ -18,7 +19,7 @@ class Book:
         if isinstance (value, str) and len(value) >= 2:
             self._title = value
         else:
-            raise ValueError ("title already exists")
+            raise ValueError ("Title must be a string and at least 2 characters long.")
     
     @property
     def author(self):
@@ -29,7 +30,7 @@ class Book:
         if isinstance (value, str) and value.strip():
             self._author = value
         else:
-            raise ValueError ("author already exists")
+            raise ValueError ("Author must be a non-empty string.")
         
     @classmethod
     def _from_db_row(cls, row):
@@ -41,19 +42,49 @@ class Book:
     def find_by_id(cls, id):
         CURSOR.execute("SELECT * FROM books WHERE id = ?", (id,))
         row = CURSOR.fetchone()
-        return row
+        if row:
+            return cls._from_db_row(row)
+        else:
+            return None
     
     @classmethod
     def find_by_title(cls, title):
         CURSOR.execute("SELECT * FROM books WHERE title = ?", (title,))
         rows = CURSOR.fetchall()
-        return rows
+        return [cls._from_db_row(row) for row in rows] if rows else []
     
     @classmethod
     def get_all(cls):
         CURSOR.execute("SELECT * FROM books")
-        rows = CURSOR.lastrowid
-        return rows
+        rows = CURSOR.fetchall()
+        return [cls._from_db_row(row) for row in rows] if rows else []
+    
+    @classmethod
+    def add_new(cls, title, author):
+        existing = cls.find_by_title(title)
+        if existing:
+            return existing[0]
+        book = cls(title, author)
+        book.save()
+        return book
+    
+    def update(self):
+        CURSOR.execute("UPDATE books SET title = ?, author = ? WHERE id = ?", (self._title, self._author, self.id,))
+        CONN.commit()
+
+    def delete(self):
+        CURSOR.execute("DELETE FROM books WHERE id = ?", (self.id,))
+        CONN.commit()
+
+    def save(self):
+        try:
+            CURSOR.execute("INSERT INTO books (title, author) VALUES (?,?)", (self._title, self._author))
+            CONN.commit()
+            self.id = CURSOR.lastrowid
+        except sqlite3.IntegrityError:
+            print("Error: A book with this title may already exist.")
+
+
     
 
 
