@@ -60,6 +60,12 @@ class Book:
         return [cls._from_db_row(row) for row in rows] if rows else []
     
     @classmethod
+    def find_by_author_id(cls, author_id):
+        CURSOR.execute("SELECT * FROM books WHERE author_id = ?", (author_id,))
+        rows = CURSOR.fetchall()
+        return [cls._from_db_row(row) for row in rows] if rows else None
+    
+    @classmethod
     def add_new(cls, title, author):
         existing = cls.find_by_title(title)
         if existing:

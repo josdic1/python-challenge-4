@@ -63,7 +63,8 @@ class Author:
         CONN.commit()
 
     def books(self):
-        
+        from book import Book
+        return [b.title for b in Book.find_by_id(self.id)]     
 
     
     def save(self):
