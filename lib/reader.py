@@ -65,8 +65,6 @@ class Reader:
         book_list = [row[2] for row in rows]
         return [Book.find_by_id(book_id) for book_id in book_list]
 
-        
-    
     def update(self):
         CURSOR.execute("UPDATE readers SET name = ? WHERE id = ?", (self._name, self.id,))
         CONN.commit()

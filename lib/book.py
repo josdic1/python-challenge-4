@@ -67,7 +67,7 @@ class Book:
     
     @classmethod
     def find_by_reader_id(cls, reader_id):
-        from borrowing import Borrowing
+        from lib.borrowing import Borrowing
         return [r.id for r in Borrowing.find_by_reader_id(reader_id)]
     
     @classmethod
@@ -78,6 +78,13 @@ class Book:
         book = cls(title, author_id)
         book.save()
         return book
+    
+    def readers(self):
+        from lib.reader import Reader
+        CURSOR.execute("SELECT * FROM borrowings WHERE book_id = ?", (self.id,))
+        rows = CURSOR.fetchall()
+        return [Reader.find_by_id(row[0]) for row in rows]
+
     
     def update(self):
         CURSOR.execute("UPDATE books SET title = ?, author_id = ? WHERE id = ?", (self._title, self._author_id, self.id,))
