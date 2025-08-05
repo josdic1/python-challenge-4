@@ -2,6 +2,9 @@ import sqlite3
 from __init__ import CONN, CURSOR
 
 class Reader:
+
+    all = []
+
     def __init__(self, name):
         self._name = name
         self.id = None

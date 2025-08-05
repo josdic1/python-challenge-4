@@ -1,19 +1,6 @@
-from __init__ import CONN, CURSOR
 from lib.author import Author
 from lib.book import Book
 from lib.reader import Reader
-
-
-print([r.name for r in Reader.get_all()])
-
-
-
-
-
-
-
-
-
 
 
 

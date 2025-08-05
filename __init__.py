@@ -6,7 +6,7 @@ SCHEMA_FILE = 'schema.sql'
 
 def setup_database():
     """Initializes the database by creating tables if they don't exist."""
-    conn = sqlite3.connect(DB_NAME)
+    conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
 
     try:
@@ -21,9 +21,9 @@ def setup_database():
         conn.close()
 
 
-if not os.path.exists('databse.py'):
+if not os.path.exists('database.db'):
     setup_database()
     
 
-CONN = sqlite3.connect('databse.py')
+CONN = sqlite3.connect('database.db')
 CURSOR = CONN.cursor()
