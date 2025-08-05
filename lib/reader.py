@@ -42,6 +42,7 @@ class Reader:
         rows = CURSOR.fetchall()
         return [cls._from_db_row(row) for row in rows] if rows else []
     
+    
     @classmethod
     def get_all(cls):
         CURSOR.execute("SELECT * FROM readers")
@@ -56,6 +57,15 @@ class Reader:
         reader = cls(name)
         reader.save()
         return reader
+    
+    def books(self):
+        from lib.book import Book
+        CURSOR.execute("SELECT * FROM borrowings WHERE reader_id = ?", (self.id,))
+        rows = CURSOR.fetchall()
+        book_list = [row[2] for row in rows]
+        return [Book.find_by_id(book_id) for book_id in book_list]
+
+        
     
     def update(self):
         CURSOR.execute("UPDATE readers SET name = ? WHERE id = ?", (self._name, self.id,))
