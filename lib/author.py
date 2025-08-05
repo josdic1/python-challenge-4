@@ -64,7 +64,7 @@ class Author:
 
     def books(self):
         from book import Book
-        return [b.title for b in Book.find_by_id(self.id)]     
+        return [b.title for b in Book.find_by_author_id(self.id)]     
 
     
     def save(self):

@@ -2,13 +2,13 @@ import sqlite3
 from __init__ import CONN, CURSOR
 
 class Book:
-    def __init__(self, title, author):
+    def __init__(self, title, author_id):
         self.title = title
-        self.author = author
+        self.author_id = author_id
         self.id = None
 
     def __repr__(self):
-        return f"BOOK title: {self.title} | author: {self.author}"
+        return f"BOOK title: {self.title} | author: {self.author_id}"
     
     @property
     def title(self):
@@ -22,15 +22,15 @@ class Book:
             raise ValueError ("Title must be a string and at least 2 characters long.")
     
     @property
-    def author(self):
-        return self._author
+    def author_id(self):
+        return self._author_id
 
-    @author.setter
-    def author(self, value):
-        if isinstance (value, str) and value.strip():
-            self._author = value
+    @author_id.setter
+    def author_id(self, value):
+        if isinstance (value, int) and value > 0:
+            self._author_id = value
         else:
-            raise ValueError ("Author must be a non-empty string.")
+            raise ValueError ("Author_id must be a non-empty integer.")
         
     @classmethod
     def _from_db_row(cls, row):
@@ -63,19 +63,19 @@ class Book:
     def find_by_author_id(cls, author_id):
         CURSOR.execute("SELECT * FROM books WHERE author_id = ?", (author_id,))
         rows = CURSOR.fetchall()
-        return [cls._from_db_row(row) for row in rows] if rows else None
+        return [cls._from_db_row(row) for row in rows] if rows else []
     
     @classmethod
-    def add_new(cls, title, author):
+    def add_new(cls, title, author_id):
         existing = cls.find_by_title(title)
         if existing:
             return existing[0]
-        book = cls(title, author)
+        book = cls(title, author_id)
         book.save()
         return book
     
     def update(self):
-        CURSOR.execute("UPDATE books SET title = ?, author = ? WHERE id = ?", (self._title, self._author, self.id,))
+        CURSOR.execute("UPDATE books SET title = ?, author_id = ? WHERE id = ?", (self._title, self._author_id, self.id,))
         CONN.commit()
 
     def delete(self):
@@ -84,7 +84,7 @@ class Book:
 
     def save(self):
         try:
-            CURSOR.execute("INSERT INTO books (title, author) VALUES (?,?)", (self._title, self._author))
+            CURSOR.execute("INSERT INTO books (title, author_id) VALUES (?,?)", (self._title, self._author_id))
             CONN.commit()
             self.id = CURSOR.lastrowid
         except sqlite3.IntegrityError:

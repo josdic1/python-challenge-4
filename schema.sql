@@ -2,7 +2,8 @@
 CREATE TABLE IF NOT EXISTS books (
     id INTEGER PRIMARY KEY,
     title TEXT,
-    author TEXT
+    author_id INTEGER,
+    FOREIGN KEY (author_id) REFERENCES authors(id) 
 );
 
 CREATE TABLE IF NOT EXISTS authors(
