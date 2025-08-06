@@ -79,11 +79,7 @@ class Book:
         book.save()
         return book
     
-    def readers(self):
-        from lib.reader import Reader
-        CURSOR.execute("SELECT * FROM borrowings WHERE book_id = ?", (self.id,))
-        rows = CURSOR.fetchall()
-        return [Reader.find_by_id(row[0]) for row in rows]
+
 
     
     def update(self):
@@ -102,7 +98,5 @@ class Book:
         except sqlite3.IntegrityError:
             print("Error: A book with this title may already exist.")
 
-
-    
 
 
