@@ -66,9 +66,8 @@ class Book:
         return [cls._from_db_row(row) for row in rows] if rows else []
     
     @classmethod
-    def find_by_reader_id(cls, reader_id):
-        from lib.borrowing import Borrowing
-        return [r.id for r in Borrowing.find_by_reader_id(reader_id)]
+    def find_by_reader_id(cls):
+        pass
     
     @classmethod
     def add_new(cls, title, author_id):
